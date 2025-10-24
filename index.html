@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hilarious Leave Reason Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #a78bfa 0%, #ec4899 50%, #ef4444 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #1f2937;
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #6b7280;
+            font-size: 16px;
+        }
+        
+        .excuse-box {
+            background: linear-gradient(135deg, #faf5ff 0%, #fce7f3 100%);
+            border-radius: 20px;
+            padding: 30px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .excuse-text {
+            font-size: 20px;
+            color: #1f2937;
+            text-align: center;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        
+        .placeholder {
+            color: #9ca3af;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .generate-btn {
+            background: #9333ea;
+            color: white;
+            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
+        }
+        
+        .generate-btn:hover {
+            background: #7e22ce;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(147, 51, 234, 0.5);
+        }
+        
+        .copy-btn {
+            background: #ec4899;
+            color: white;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+            display: none;
+        }
+        
+        .copy-btn:hover {
+            background: #db2777;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.5);
+        }
+        
+        .copy-btn.show {
+            display: flex;
+        }
+        
+        .copy-btn.copied {
+            background: #10b981;
+        }
+        
+        .disclaimer {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .disclaimer p {
+            color: #92400e;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="icon">😂</div>
+            <h1>Hilarious Leave Reason Generator</h1>
+            <p class="subtitle">⚠️ For entertainment purposes only! Please use real reasons for actual leave requests.</p>
+        </div>
+        
+        <div class="excuse-box">
+            <p class="excuse-text placeholder" id="excuseText">
+                Click the button below to generate a ridiculous reason!
+            </p>
+        </div>
+        
+        <div class="button-container">
+            <button class="generate-btn" onclick="generateExcuse()">
+                <span>🔄</span>
+                Generate Reason
+            </button>
+            <button class="copy-btn" id="copyBtn" onclick="copyExcuse()">
+                <span id="copyIcon">📋</span>
+                <span id="copyText">Copy</span>
+            </button>
+        </div>
+        
+        <p style="text-align: center; color: #6b7280; margin-bottom: 30px; font-size: 16px;">
+            Got your reason? Now head over to TSSS and use your employee privilege to book your flights!
+        </p>
+        
+        <div class="disclaimer">
+            <p>🤣 Remember: These are jokes! Always provide genuine reasons for leave requests at work. Or not!</p>
+        </div>
+    </div>
+
+    <script>
+        const reasons = [
+            "I'll be on leave to settle a long-standing debate in my family: whether gulab jamun should be eaten hot or cold. Peace negotiations will take about 10 days.",
+            "I'm taking time away to discover where socks go after laundry. I will not return without answers.",
+            "Taking time off to defragment my thoughts. My brain has too many tabs open, including one playing unknown music.",
+            "Taking time off to locate dabba lids. No food storage until closure.",
+            "Need leave to teach my neighbour's auntie how to unmute herself on Zoom. This is now a full-time humanitarian mission.",
+            "Taking leave to argue with customer service about why my food order went to the wrong pin code three states away.",
+            "I need time off to locate the TV remote. It's been 3 days. Search and rescue operations are underway.",
+            "Taking leave to attend a family meeting about why I'm still single. Expected duration: 2-3 business days of interrogation.",
+            "Need leave to organise my collection of Good Day biscuit wrappers that I've been saving for 'craft projects'.",
+            "Taking time off to figure out why my RO water purifier makes that sound at 3 AM. It's haunted.",
+            "I need leave to settle which cousin gets to sit in the front seat during the family road trip. UN mediation required.",
+            "Taking leave to teach my parents the difference between 'Reply' and 'Reply All'. World peace depends on it.",
+            "Need time off to investigate why my tiffin box always comes back with someone else's sabzi.",
+            "Taking leave to attend therapy sessions for my pressure cooker. The whistling has become passive-aggressive.",
+            "I need leave to participate in the society WhatsApp group admin elections. Campaign season has begun.",
+            "Taking time off to find out which neighbour has been parking in my designated spot. Justice will be served.",
+            "Need leave to organise my mother's collection of plastic bags stored inside one giant plastic bag.",
+            "Taking leave to negotiate with the auto driver who refuses to go by meter. Talks have reached a critical stage.",
+            "I need time off to figure out why my phone's battery dies at exactly 23% every single day.",
+            "Taking leave to attend a summit on whether chai should be had before or after breakfast. No consensus yet.",
+            "Need leave to solve the mystery of why every pen in my house has disappeared except the one that doesn't work.",
+            "Taking time off to counsel my refrigerator. It keeps randomly making judgment noises when I open it at night.",
+            "I need leave to attend my building society's AGM. Parking politics have reached DEFCON 1.",
+            "Taking leave to investigate who keeps eating my labeled lunch from the office fridge. This ends now.",
+            "Need time off to teach my father that YouTube videos can be paused. He's been watching 3-hour lectures in one sitting.",
+            "Taking leave to mediate between my mother and the pressure cooker. Their relationship has become toxic.",
+            "I need leave to find a matching pair of socks. It's been 6 months. I refuse to give up hope.",
+            "Taking time off to organise a search party for my Tupperware that went to someone's house party and never returned.",
+            "Need leave to attend peace talks between my landlord and the leaking tap. Both refuse to compromise.",
+            "Taking leave because my horoscope said Mercury is in retrograde and I should avoid all productivity.",
+            "I need time off to figure out which family member changed the WiFi password without telling anyone.",
+            "Taking leave to search for the matching lid to my favorite dabba. This is personal now.",
+            "Need leave to attend an intervention for my mother's addiction to forwarding Good Morning messages.",
+            "Taking time off to investigate why the lift always smells like someone cooked fish curry at 6 AM.",
+            "I need leave to organise my collection of old Nokia phones that 'still work perfectly fine'.",
+            "Taking leave to teach my relatives that LinkedIn is not Facebook. They keep posting birthday wishes.",
+            "Need time off to mediate the great family debate: aachar on the side or mixed in with rice.",
+            "Taking leave to find out which neighbour has been stealing my newspaper for the past 6 months.",
+            "I need leave to attend a conference on why every Indian household owns 47 coffee mugs but uses only 2.",
+            "Taking time off to solve why my mother insists on yelling at me from three rooms away instead of calling my phone.",
+            "Need leave to organise the great Tupperware reorganisation of 2025. Lids and containers must be reunited.",
+            "Taking leave to investigate why the society watchman knows more about my schedule than I do.",
+            "I need time off to teach my parents that WhatsApp forwards are not reliable news sources.",
+            "Taking leave to attend family counseling about why we can't decide where to order dinner from without a 2-hour debate.",
+            "Need leave to figure out how to tell my mother her WhatsApp status is visible to all her contacts.",
+            "Taking time off to investigate the mysterious case of the vanishing phone chargers in my house.",
+            "I need leave to mediate between my family members about whose job is more stressful. TRP ratings expected.",
+            "Taking leave to organise my father's collection of old newspapers that he's keeping for 'important reference'.",
+            "Need time off to teach my neighbour that 8 AM on Sunday is not an appropriate time for furniture rearranging.",
+            "Taking leave to attend a symposium on why every mother knows when you've eaten outside food.",
+            "I need leave to solve the eternal mystery of why the gas cylinder always runs out during festival cooking.",
+            "Taking time off to train my family on the proper way to close WhatsApp without accidentally video calling everyone.",
+            "Need leave to investigate why my mother's sixth sense activates exactly when I'm about to order food online.",
+            "Taking leave to attend crisis management training for when aunties ask 'Beta, when are you getting married?'",
+            "I need time off to organise the migration of 10,000 photos from my phone that I'll never look at again.",
+            "Taking leave to figure out why every relative thinks I'm an IT helpdesk just because I know how to reset a router.",
+            "Need leave to attend therapy for my relationship with my old scooter. It's complicated.",
+            "Taking time off to investigate why my upstairs neighbor's daily workout schedule sounds like furniture demolition.",
+            "I need leave to solve why every phone call from my parents assumes I'm currently unemployed and available.",
+            "Taking leave to attend a workshop on how to explain to parents that I can't pause an online meeting.",
+            "Need time off to find out who used all the hot water before my morning shower. This is war.",
+            "Taking leave to organise a search mission for all the pens that people borrowed and never returned.",
+            "I need leave to teach my mother that just because I work from home doesn't mean I'm not working.",
+            "Taking time off to investigate why my bathroom tap has two settings: freezing or lava.",
+            "Need leave to attend counseling for my relationship with my apartment's parking spot. Someone keeps taking it.",
+            "Taking leave to solve the mystery of why every aunty thinks their son/daughter is perfect for me.",
+            "I need time off to organise my collection of shopping bags that are too good to throw away.",
+            "Taking leave to figure out why my balcony has become the neighbourhood pigeon's favourite conference room.",
+            "Need leave to attend a summit on whether rasam should be drunk or eaten with rice. Tensions are high.",
+
+            "I need leave to investigate who keeps parking their two-wheeler in a way that blocks everyone else.",
+            "Taking leave to attend mediation between my mother and the pressure cooker that whistles judgmentally.",
+            "Need time off to figure out why my neighbor thinks 7 AM drilling is socially acceptable.",
+            "Taking leave to organize my wardrobe of clothes that don't fit but I'm keeping for 'someday'.",
+            "I need leave to solve why every family function requires me to perform my 'special talent' from 1998.",
+            "Taking time off to teach relatives that my Instagram is not a matrimonial profile.",
+            "Need leave to attend peace negotiations about who gets the window seat on the next family train journey.",
+            "Taking leave to investigate why my mother can hear me opening a chocolate wrapper from 3 floors away.",
+            "I need time off to organise the great utensil migration from my place to other people's homes.",
+            "Taking leave to figure out how to tell my landlord that the 'running water 24/7' claim was aspirational.",
+            "Need leave to attend a conference on why every Indian household owns 3 rice cookers but uses only 1.",
+            "Taking time off to teach my father that he doesn't need to shout into the phone for international calls.",
+            "I need leave to solve the mystery of the phantom WiFi user who's always using my bandwidth.",
+            "Taking leave to attend family therapy about whose turn it is to clean the car that nobody wants to clean.",
+            "Need time off to investigate why my mother's radar activates when I'm lying on the couch.",
+            "Taking leave to organise my collection of charging cables for devices I no longer own.",
+            "I need leave to figure out why the society WhatsApp group messages at 6 AM about water supply.",
+            "Taking time off to teach my parents that every YouTube link I send is not a virus.",
+            "Need leave to attend a symposium on why every mother thinks their child is hungry regardless of evidence.",
+            "Taking leave to solve why my neighbour's music taste peaks exactly when I have an important meeting.",
+            "I need time off to investigate the great mystery of where all the teaspoons in my house disappeared to.",
+            "Taking leave to attend conflict resolution for the battle over the AC temperature setting.",
+            "Need leave to figure out how to explain to relatives that I can't fix their phone just by looking at it.",
+            "Taking time off to organise my father's forwarded messages collection. It's reached archival proportions.",
+            "I need leave to solve why the courier delivery person never rings the bell despite me being home.",
+            "Taking leave to attend a workshop on how to decline wedding invitations without offending 47 relatives.",
+            "Need time off to teach my mother that WhatsApp last seen doesn't mean I'm ignoring her specifically.",
+            "Taking leave to investigate why my kitchen exhaust fan sounds like it's preparing for takeoff.",
+            "I need leave to organise the great migration of my clothes from the chair to the actual cupboard.",
+            "Taking time off to figure out why every video call with parents shows only their ceiling.",
+            "Need leave to attend therapy for survivors of 'beta, just one more roti' emotional blackmail.",
+            "Taking leave to solve the mystery of why my Netflix shows pause automatically but dad's don't.",
+
+            "Taking leave to attend a crisis summit on why every family trip requires a 4 AM departure time.",
+            "Need leave to investigate why my mother's radar detects junk food consumption from miles away.",
+            "Taking time off to organise the paperwork I've been keeping 'just in case' since 2015.",
+            "I need leave to solve why the building water supply always fails during my shower time.",
+            "I'm taking an extended break to remember all the passwords I've reset since 2018. It may take a while.",
+            "I've realised my body has been running on 'Low Battery Mode' for months. I need dedicated time to locate the charger.",
+            "I'll be on leave to settle a long-standing debate in my family: whether gulab jamun should be eaten hot or cold. Peace negotiations may take weeks.",
+            "Taking time off to help my plants understand that I can't photosynthesise for them. Emotional boundaries must be set.",
+            "I need a break to train my reflexes—lately, I've been opening the fridge expecting answers to life.",
+            "I'm taking extended leave to retrieve my motivation. Last seen in 2022 near a long weekend.",
+            "My sleep schedule and I are attending therapy together. We're trying to reconnect.",
+            "I require time to assist my relatives who believe 'forwarded as received' is a research citation.",
+            "I'll be away working on a critical life update. My brain's 'trial period' has expired and needs reinstallation.",
+            "I've been asked to mediate in a tense household situation—apparently, someone said chai is overrated.",
+            "My wardrobe staged a protest against my folding technique. We're in negotiations.",
+            "My pillow filed a complaint about my absence at night. A reconciliation retreat has been scheduled.",
+            "I'll be away conducting research on 'What day is it?' because I've genuinely lost track.",
+            "I'll be on leave to understand why my dreams come with cliffhangers and no next episodes.",
+            "There's an extended family gathering. Someone said 'Let's just decide everything in one sitting,' so I may be gone a while.",
+            "I'm required to interpret ancient family WhatsApp forwards and explain memes to elders. It's a full-time assignment.",
+            "We are doing a census of the relatives. It includes identifying who is angry with whom and why.",
+            "I need to take a break to uninstall and reinstall my personality. Too many trial versions active.",
+            "Taking time off to reintroduce myself to hobbies I pretended to have on my CV.",
+            "I'll be out, attempting to fold a fitted bedsheet without crying. This may take longer than expected.",
+            "I'm taking extended leave to teach my plants about personal responsibility. Photosynthesis is teamwork.",
+            "My fridge and I need space. We keep opening up to each other, but nothing changes.",
+            "I've realised my pillow misses me. We're attending couples therapy.",
+            "Taking leave to find my peace of mind. Last seen wandering near a 2-hour Zoom meeting.",
+            "I must attend a silent retreat. The retreat isn't silent—I am.",
+            "I'm on leave to fix my sleep cycle. It currently wakes up before me.",
+            "My kitchen and I are in talks. It wants me to cook, I want it to cook. We need mediation.",
+            "I need a break to rebuild trust with my alarm clock. I've ignored it too many times.",
+            "My utensils are planning a strike. I must attend peace talks before they escalate.",
+            "I'm investigating who keeps switching off the fan at home. Until justice is served, I must remain on-site.",
+            "I've undertaken a personal mission to finally read the 'Terms & Conditions' I agreed to in 2007.",
+            "I'm on a journey to find my inner peace. It left when someone said, 'Quick sync?'",
+            "I'll be participating in a silent conversation with myself. I'll return when we agree.",
+            "I'm embarking on a mindful detox—no meetings, no messages, just me asking, 'What day is it?'",
+            "I need time to help my family understand that 'Reply All' is not personality.",
+            "A relative started a diet. I've been appointed moral support and snack confiscator.",
+            "I have to be present for an inter-generational argument about who stole the TV remote in 2003.",
+            "I'll be out, trying to remember why I entered the room. It might take days.",
+            "Taking leave to track my ambition. It said 'BRB' in 2020 and vanished.",
+            "I'll return when I understand how people 'just wake up early.'",
+            "Taking an extended leave to recalibrate my deliverables-to-dopamine ratio.",
+            "On a strategic offsite with myself to discuss future alignment between ambition and reality.",
+            "Initiating a mandatory system reboot to address burnout detected in core processors.",
+            "Conducting a deep-dive sprint into non-productivity; outcomes to be shared post-vacation.",
+            "Applying for leave under the 'Preventative Absence Framework for Emotional Stability (PAFES-2025).'",
+            "Entering stealth mode to ideate new ways of pretending to work during video calls.",
+            "Participating in a pilot programme on work-life balance. Spoiler: work lost.",
+            "Taking time off to rebrand myself from 'employee' to 'person.'",
+            "I've been summoned to a parallel universe where the weekend lasts forever. I must represent Earth.",
+            "My toaster has achieved sentience. Negotiations for breakfast rights are ongoing.",
+            "Going on leave to teach a community of squirrels about personal finance.",
+            "I've been chosen by a council of pigeons to mediate airspace boundary disputes.",
+            "My mirror and I are having trust issues—it keeps reflecting someone tired.",
+            "Taking time off to audition for the role of 'person who has it together.'",
+            "Currently tracking a suspicious noise that started in my brain and might be ambition returning.",
+            "I've enrolled in a workshop to help ghosts from old emails finally move on.",
+            "Subject: Application for Temporary Withdrawal from All Forms of Professional Urgency (Ref: 2025/LV/LOL)",
+            "Kindly approve my request for personal reconfiguration leave, aimed at realigning internal KPIs (Kindness, Patience, Imagination).",
+            "This is to inform you that I'll be unavailable due to an ongoing audit of my mental hard drive.",
+            "Pursuant to Section 'Self-Care is Not Optional,' I seek approval for voluntary emotional reforestation.",
+            "Please consider this a formal notice of absence to address escalating conflicts between me and my alarm clock.",
+            "I wish to temporarily disengage from professional bandwidth allocation in favour of domestic equilibrium restoration.",
+            "Per internal counsel (my brain), I am advised to take preventive leave to mitigate potential sarcasm overflow.",
+            "I shall be unavailable as I am currently in arbitration with my responsibilities. Mediation expected to extend into the next quarter.",
+            "My fish isn't feeling well and I've been advised to monitor his bubbles closely for the next few days.",
+            "Taking time off—my goldfish has developed attachment issues and refuses to eat unless I'm emotionally present.",
+            "I'll be on leave due to an aquatic emergency. My fish has entered his 'existential floating phase.'",
+            "Applying for emergency compassionate leave to oversee critical care for a dependent goldfish exhibiting signs of low morale.",
+            "Due to unforeseen developments in my aquarium ecosystem, I'll be offline to stabilise the environment and morale of all parties involved.",
+            "My fish has recently discovered gravity and is struggling to process the implications.",
+            "Taking an extended break to accompany my fish to therapy—it's still processing 'Finding Nemo.'",
+            "I'm out for a few days. My fish is unwell and the vet says emotional support (mine) improves water quality.",
+            "My fish has been acting distant lately. We're working through things together.",
+            "My fish just got promoted to 'senior aquatic presence,' and I've been invited to his induction ceremony.",
+            "My dog ate my motivation. Vet says recovery (for both of us) will take a week.",
+            "Taking time off—my dog's been showing early signs of impostor syndrome after watching a border collie on YouTube.",
+            "My dog insists on a daily 12-hour nap buddy system. I must comply for his emotional stability.",
+            "Applying for pet-ernity leave. My dog just learned how to open doors and now won't stop attending meetings uninvited.",
+            "My dog's social calendar has outgrown mine. I'll be on chauffeur duty until further notice.",
+            "My cat has started scheduling performance reviews for me at 3 a.m. I need a break to renegotiate our working hours.",
+            "Taking a few days off to re-earn my cat's respect. I accidentally bought the wrong flavour of guilt trip treats.",
+            "My cat's emotional support human (me) requires downtime to process recent feedback—mostly hissing.",
+            "Applying for leave: my cat has entered her dramatic phase and demands constant observation and applause.",
+            "I'll be on leave conducting conflict resolution between my cat and her reflection. Mediation may take weeks.",
+            "My guinea pig has trust issues. We're attending joint therapy after I sneezed too loudly.",
+            "Taking extended leave—my guinea pig has developed a concerning interest in crypto mining.",
+            "My guinea pig started a protest demanding 24/7 cucumber access. I must negotiate terms.",
+            "I'll be unavailable; my guinea pig and I are building him a LinkedIn profile.",
+            "On compassionate leave—my guinea pig recently learned about winter and isn't coping well.",
+            "My parrot overheard confidential calls and now won't stop repeating my KPIs aloud. We're in damage control mode.",
+            "Taking time off—my tortoise is moving house. Literally. It's a slow process.",
+            "My iguana has joined a silent retreat. I'm the plus-one.",
+            "Applying for leave: my cactus isn't thriving emotionally. I think it needs space (and less sunlight).",
+            "I'll be on leave attending to my sourdough starter—it's acting more dramatic than most people I know.",
+            "My pet rock has cracked under pressure. We're seeking geological counselling.",
+            "I'm on emergency leave—my houseplant applied for photosynthesis leave and I'm short-staffed.",
+            "Taking time off to help my Roomba find itself. It's been going in circles lately.",
+            "My emotional support banana bread didn't rise. Neither did I.",
+            "My pet cloud escaped. I'll be out until the weather clears."
+        ];
+
+        let currentExcuse = '';
+
+        function generateExcuse() {
+            const randomIndex = Math.floor(Math.random() * reasons.length);
+            currentExcuse = reasons[randomIndex];
+            
+            const excuseText = document.getElementById('excuseText');
+            excuseText.textContent = `"${currentExcuse}"`;
+            excuseText.classList.remove('placeholder');
+            
+            document.getElementById('copyBtn').classList.add('show');
+            
+            // Reset copy button state
+            document.getElementById('copyIcon').textContent = '📋';
+            document.getElementById('copyText').textContent = 'Copy';
+            document.getElementById('copyBtn').classList.remove('copied');
+        }
+
+        function copyExcuse() {
+            navigator.clipboard.writeText(currentExcuse).then(() => {
+                document.getElementById('copyIcon').textContent = '✓';
+                document.getElementById('copyText').textContent = 'Copied!';
+                document.getElementById('copyBtn').classList.add('copied');
+                
+                setTimeout(() => {
+                    document.getElementById('copyIcon').textContent = '📋';
+                    document.getElementById('copyText').textContent = 'Copy';
+                    document.getElementById('copyBtn').classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
